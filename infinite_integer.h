@@ -614,6 +614,10 @@ namespace infinite_integer {
 		if (_d1.is_zero() && _d2.is_zero()) {
 			return true;
 		}
+		// числа с разными знаками не равны
+		if (_d1.positive != _d2.positive) {
+			return false;
+		}
 		auto not_zero = std::bind(std::not_equal_to<Digit::ull_t>(), std::placeholders::_1, 0);
 		// разность длины векторов value этого числа (this) и _digit
 		std::vector<int>::difference_type size_diff = _d1.value.size() - _d2.value.size();
