@@ -399,7 +399,7 @@ namespace infinite_integer {
 	}
 
 	inline unsigned Digit::get_digit_in_position(unsigned _n) const {
-		if (_n >= value.size() * SCALE) {
+		if (_n >= greatest_position()) {
 			return 0;
 		}
 		std::vector<ull_t>::size_type i = _n / SCALE;
