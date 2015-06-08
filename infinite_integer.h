@@ -212,7 +212,7 @@ namespace infinite_integer {
 			oss << '-';
 		}
 		std::vector<ull_t>::const_reverse_iterator iter = value.crend() - (greatest_position() / SCALE + 1);
-		auto e = value.crend();
+		std::vector<ull_t>::const_reverse_iterator e = value.crend();
 		oss << *iter++;
 		// записываем элементы из value в oss, начиная со старших разрядов числа
 		while (iter != e) {
@@ -324,7 +324,7 @@ namespace infinite_integer {
 		// результат
 		Digit temp = DIGIT_ZERO;
 		// номер наибольшего разряда в _digit
-		int digit_pos = _digit.greatest_position();
+		int digit_pos = static_cast<int>(_digit.greatest_position());
 		// умножаем this на цифру из каждой позиции из _digit с соответствующий сдвигом
 		while (digit_pos >= 0) {
 			temp += value_multi(*this, _digit.get_digit_in_position(digit_pos)).shift_left(digit_pos);
@@ -535,7 +535,7 @@ namespace infinite_integer {
 			return *this;
 		}
 		// найдем наибольший ненулевой разряд числа
-		int ind = greatest_position();
+		int ind = static_cast<int>(greatest_position());
 		// сделаем value достаточно большим
 		reserve_enough_shift_left(_n);
 		// выполняем сдвиг разрядов, включая нулевой
