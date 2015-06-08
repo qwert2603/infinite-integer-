@@ -360,7 +360,7 @@ namespace infinite_integer {
 		Digit d2 = _digit.abs();				// делитель
 		Digit temp = DIGIT_ZERO;				// частное (результат)
 		// имитация деления столбиком (делим только модули, знак уже известен)
-		int shift = this->greatest_position() - _digit.greatest_position();
+		unsigned shift = this->greatest_position() - _digit.greatest_position();
 		while (d1 >= d2) {
 			d2.shift_left(shift);
 			while (d2 > d1) {
@@ -368,7 +368,7 @@ namespace infinite_integer {
 				--shift;
 			}
 			Digit d2_temp = d2;
-			int one_digit_temp = 1;
+			unsigned one_digit_temp = 1;
 			while (d1 >= d2) {
 				d2 += d2_temp;
 				++one_digit_temp;
@@ -407,7 +407,7 @@ namespace infinite_integer {
 		ull_t one_value = *(value.cbegin() + i);
 		one_value /= pwr_10(j);
 		one_value %= 10;
-		return static_cast<int>(one_value);
+		return static_cast<unsigned>(one_value);
 	}
 
 	inline void Digit::set_digit_in_position(unsigned _n, unsigned _v) {
@@ -418,15 +418,15 @@ namespace infinite_integer {
 		// элемент вектора, в котором находится изменяемый разряд
 		ull_t &one_value = *(value.begin() + i);
 		// то, что раньше было в этом разряде
-		int prev = (one_value / pwr_10(j)) % 10;
+		int prev = static_cast<int>((one_value / pwr_10(j)) % 10);
 		// разница между новым и старым значением
-		int diff = _v - prev;
+		int diff = static_cast<int>(_v) - prev;
 		// внесение изменений
-		one_value += diff * pwr_10(j);
+		one_value += static_cast<ull_t>(static_cast<ll_t>(diff) * pwr_10(j));
 	}
 
 	inline unsigned Digit::greatest_position() const {
-		int ind = value.size() * SCALE;
+		unsigned ind = value.size() * SCALE;
 		while (get_digit_in_position(--ind) == 0);
 		return ind;
 	}
@@ -620,7 +620,7 @@ namespace infinite_integer {
 		}
 		auto not_zero = std::bind(std::not_equal_to<Digit::ull_t>(), std::placeholders::_1, 0);
 		// разность длины векторов value этого числа (this) и _digit
-		std::vector<int>::difference_type size_diff = _d1.value.size() - _d2.value.size();
+		std::vector<Digit::ull_t>::difference_type size_diff = _d1.value.size() - _d2.value.size();
 		// если вектора имеют размеры и у большего есть числа старшие разряды не равные 0, то числа не равны
 		if (size_diff > 0) {
 			if (std::find_if(_d1.value.crbegin(), _d1.value.crbegin() + size_diff, not_zero) !=
@@ -655,7 +655,7 @@ namespace infinite_integer {
 		}
 		auto not_zero = std::bind(std::not_equal_to<Digit::ull_t>(), std::placeholders::_1, 0);
 		// разность длины векторов value этого числа (this) и _digit
-		std::vector<int>::difference_type size_diff = _d1.value.size() - _d2.value.size();
+		std::vector<Digit::ull_t>::difference_type size_diff = _d1.value.size() - _d2.value.size();
 		// если вектора имеют размеры и у большего есть числа старшие разряды не равные 0, то одно число меньше другого
 		if (size_diff > 0) {
 			if (std::find_if(_d1.value.crbegin(), _d1.value.crbegin() + size_diff, not_zero) !=
@@ -670,7 +670,7 @@ namespace infinite_integer {
 			}
 		}
 		// минимум среди размеров сравниваемых вектров
-		std::vector<int>::difference_type common_size = std::min(_d1.value.size(), _d2.value.size());
+		std::vector<Digit::ull_t>::difference_type common_size = std::min(_d1.value.size(), _d2.value.size());
 		// теперь сравним те разряды, которые есть у обоих чисел, учитывая знаки чисел
 		return std::lexicographical_compare(
 			_d1.value.crend() - common_size, _d1.value.crend(),
