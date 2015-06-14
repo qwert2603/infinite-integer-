@@ -356,6 +356,11 @@ namespace infinite_integer {
 			positive = result_positive;
 			return *this;
 		}
+		// если в делимом и делителе только по 1 элементу в массиве value, то деление выполняется просто
+		if (greatest_position() < SCALE && _digit.greatest_position() < SCALE) {
+			value[0] /= _digit.value[0];
+			return *this;
+		}
 		Digit d1 = this->abs();					// делимое
 		Digit d2 = _digit.abs();				// делитель
 		Digit temp = DIGIT_ZERO;				// частное (результат)
